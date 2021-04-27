@@ -34,23 +34,47 @@ int stats_dir(int sockfd, struct log_server server_int[]){ //not working
 
 	for(int i = 0; i < number_of_files; i++){
 
-		string temp_size = to_string(server_int[i].file_size);
-		string temp_down = to_string(server_int[i].num_downloads);
+		if(server_int[i].file_name != "removed"){
+
+			string temp_size = to_string(server_int[i].file_size);
+			string temp_down = to_string(server_int[i].num_downloads);
 
 
-		string send_log = server_int[i].file_name;
-		send_log += " ";
-		send_log += temp_size;
-		send_log += " ";
-		send_log += server_int[i].date_time;
-		send_log += " ";
-		send_log += temp_down; // this is ugly but ....
+			string send_log = server_int[i].file_name;
+			send_log += " ";
+			send_log += temp_size;
+			send_log += " ";
+			send_log += server_int[i].date_time;
+			send_log += " ";
+			send_log += temp_down; // this is ugly but ....
 
-		cout << "#" << i << ": " << send_log << endl;
+			cout << "#" << i << ": " << send_log << endl;
 
-		send(sockfd, send_log.c_str(), 100, 0); // send log info to client
+			send(sockfd, send_log.c_str(), 100, 0); // send log info to client
 
-		read(sockfd, msg, 7); // wait for ack
+			read(sockfd, msg, 7); // wait for ack
+		}
+
+		else if(server_int[i].file_name == "removed"){
+
+			string temp_size = to_string(server_int[i+1].file_size);
+			string temp_down = to_string(server_int[i+1].num_downloads);
+
+
+			string send_log = server_int[i+1].file_name;
+			send_log += " ";
+			send_log += temp_size;
+			send_log += " ";
+			send_log += server_int[i+1].date_time;
+			send_log += " ";
+			send_log += temp_down; // this is ugly but ....
+
+			cout << "#" << i << ": " << send_log << endl;
+
+			send(sockfd, send_log.c_str(), 100, 0); // send log info to client
+
+			read(sockfd, msg, 7); // wait for ack
+		}
 
 	}
 

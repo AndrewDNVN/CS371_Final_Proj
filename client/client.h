@@ -22,7 +22,7 @@
 #define O_WRONLY         01
 #define O_RDWR           02
 
-const int BUFSIZE = 25;
+const int BUFSIZE = 1000;
 
 //Used to set size of buffer
 
